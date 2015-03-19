@@ -1,0 +1,61 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(name='description', content='A simple application built with AngularJS, NodeJS and styled with Twitter Bootstrap to fetch new tweets stream for a specific #hashtag.')
+        meta(name='author', content='Ibrahim Abdel Fattah Mohamed <b@bingorabbit.com>')
+        link(rel='icon', href='/favicon.ico')
+        title Shebbak - Your hashtags in a simple and cool UI!
+        // Bootstrap core CSS
+        link(href='bower_components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+        link(href='bower_components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+        // Custom styles for this template
+        link(href='style.css', rel='stylesheet')
+
+    body
+        .container
+            .header
+                ul.nav.nav-pills.pull-right
+                    li.active
+                        a(href='#') Home
+                    li
+                        a(href='#') About
+                    li
+                        a(href='#') Contact
+                h3.text-muted
+                    span.fa.fa-slack
+                    | Shebbak
+             .content
+                .media-list
+                   .media
+                      .media-left.media-top
+                         a(href="#")
+                            img.media-object.thumbnail(src="http://placehold.it/75x75")
+                      .media-body
+                         h4.media-heading @tweet_username
+                         span.tweet_info 6:11pm · 19 Mar 2015
+                         span.tweet Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                 .media
+                     .media-left.media-top
+                         a(href="#")
+                             img.media-object.thumbnail(src="http://placehold.it/75x75")
+                     .media-body
+                         h4.media-heading @tweet_username
+                         span.tweet_info 6:11pm · 19 Mar 2015
+                         span.tweet Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                 .media
+                     .media-left.media-top
+                         a(href="#")
+                             img.media-object.thumbnail(src="http://placehold.it/75x75")
+                     .media-body
+                         h4.media-heading @tweet_username
+                         span.tweet_info 6:11pm · 19 Mar 2015
+                         span.tweet Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+            .footer
+                p &copy; Shebbak 2014
+        // /container
+        // Bootstrap core JavaScript
+        // ==================================================
+        // Placed at the end of the document so the pages load faster
