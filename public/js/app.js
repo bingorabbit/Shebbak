@@ -1,9 +1,17 @@
 /**
  * Created by bingorabbit on 3/20/15.
  */
-var ShebbakApp = angular.module('ShebbakApp', []);
+var ShebbakApp = angular.module('ShebbakApp', ['ShebbakServices']);
 
-ShebbakApp.controller('MainController', function($scope){
+ShebbakApp.controller('MainController', function($scope, socket){
+
+    console.log(socket);
+
+    socket.emit("Hello", {"name": "bingo"})
+    socket.on('HelloBack', function(data){
+        alert("Recieved Hello Back");
+    })
+
     $scope.tweets = [
         {
             'tweet_username': 'bingorabbit',
