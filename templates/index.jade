@@ -14,8 +14,8 @@ html(lang='en')
         // Custom styles for this template
         link(href='style.css', rel='stylesheet')
 
-    body
-        .container
+    body(ng-app='ShebbakApp')
+        .container(ng-controller='MainController')
             .header
                 ul.nav.nav-pills.pull-right
                     li.active
@@ -29,33 +29,17 @@ html(lang='en')
                     | Shebbak
              .content
                 .media-list
-                   .media
+                   .media(ng-repeat='tweet in tweets')
                       .media-left.media-top
                          a(href="#")
-                            img.media-object.thumbnail(src="http://placehold.it/75x75")
+                            img.media-object.thumbnail(src="{{tweet.tweet_user_img}}")
                       .media-body
-                         h4.media-heading @tweet_username
-                         span.tweet_info 6:11pm · 19 Mar 2015
-                         span.tweet Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                 .media
-                     .media-left.media-top
-                         a(href="#")
-                             img.media-object.thumbnail(src="http://placehold.it/75x75")
-                     .media-body
-                         h4.media-heading @tweet_username
-                         span.tweet_info 6:11pm · 19 Mar 2015
-                         span.tweet Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                 .media
-                     .media-left.media-top
-                         a(href="#")
-                             img.media-object.thumbnail(src="http://placehold.it/75x75")
-                     .media-body
-                         h4.media-heading @tweet_username
-                         span.tweet_info 6:11pm · 19 Mar 2015
-                         span.tweet Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                         h4.media-heading @{{tweet.tweet_username}}
+                         span.tweet_info.text-primary.clearfix {{tweet.tweet_info}}
+                         span.tweet {{tweet.tweet}}
             .footer
                 p &copy; Shebbak 2014
         // /container
         // Bootstrap core JavaScript
-        // ==================================================
-        // Placed at the end of the document so the pages load faster
+        script(type='text/javascript', src='bower_components/angular/angular.js')
+        script(type='text/javascript', src='js/app.js')
