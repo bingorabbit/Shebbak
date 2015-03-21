@@ -5,6 +5,21 @@ var express = require('express')
 var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server)
+var fs = require('fs');
+var configurationFile = "./configs.json"
+
+var configs = JSON.parse(
+                fs.readFileSync(configurationFile)
+                )
+console.log(configs.twitter.consumer_key)
+var Twit = require('twit')
+
+var T = new Twit({
+    consumer_key: configs.twitter.consumer_key,
+    consumer_secret: configs.twitter.consumer_secret,
+    access_token: configs.twitter.access_token,
+    access_token_secret: configs.twitter.access_token_secret
+})
 
 var PORT_LISTENER = 3000;
 app.set('port', process.env.PORT || PORT_LISTENER);
@@ -15,7 +30,13 @@ app.use(express.static(__dirname + '/public/'));
 
 io.on('connection', function(socket){
     socket.on('Hello', function(data){
-        socket.emit('HelloBack')
+        var stream = T.stream('statuses/filter', {
+            track: "#egypt"
+        });
+        stream.on('tweet', function(tweet){
+            console.log(tweet.text);
+            //socket.emit('tweet', tweet);
+        })
     })
 });
 
