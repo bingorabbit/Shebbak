@@ -11,18 +11,11 @@ var configurationFile = "./configs.json"
 var configs = JSON.parse(
                 fs.readFileSync(configurationFile)
                 )
-console.log(configs.twitter.consumer_key)
 var Twit = require('twit')
 
-var T = new Twit({
-    consumer_key: configs.twitter.consumer_key,
-    consumer_secret: configs.twitter.consumer_secret,
-    access_token: configs.twitter.access_token,
-    access_token_secret: configs.twitter.access_token_secret
-})
+var T = new Twit(configs.twitter)
 
-var PORT_LISTENER = 3000;
-app.set('port', process.env.PORT || PORT_LISTENER);
+app.set('port', process.env.PORT || configs.PORT_LISTENER);
 app.set('views', __dirname + '/templates');
 app.set('view engine', 'jade');
 
@@ -31,12 +24,19 @@ app.use(express.static(__dirname + '/public/'));
 io.on('connection', function(socket){
     socket.on('Hello', function(data){
         var stream = T.stream('statuses/filter', {
-            track: "#egypt"
+            track: "مصر"
         });
         stream.on('tweet', function(tweet){
             console.log(tweet.text);
-            //socket.emit('tweet', tweet);
-        })
+            socket.emit('tweet', tweet);
+        });
+        stream.on('disconnect', function (disconnectMessage) {
+            console.log("Stream disconnected with error message: " + disconnectMessage);
+            stream.start();
+        });
+        stream.on('error', function(error){
+            console.log("Error happened: " + error);
+        });
     })
 });
 

@@ -23,13 +23,28 @@ body {
     line-height: 40px;
 }
 
+.content {
+    height: auto;
+    margin-bottom: 39px;
+}
 /* Custom page footer */
 .footer {
     padding-top: 19px;
     color: #777;
     border-top: 1px solid #e5e5e5;
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    height: 70px;
 }
+.slider {
+    overflow-y: hidden;
+    max-height: 500px; /* approximate max height */
 
+    transition-property: all;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
 .media {
     border-bottom: 1px solid #e5e5e5;
     padding-bottom: 1em;

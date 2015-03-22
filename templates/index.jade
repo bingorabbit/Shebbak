@@ -29,21 +29,38 @@ html(lang='en')
                     | Shebbak
              .content
                 .media-list
-                   .media(ng-repeat='tweet in tweets')
+                   .media.slider(ng-repeat='tweet in tweets')
                       .media-left.media-top
-                         a(href="#")
-                            img.media-object.thumbnail(src="{{tweet.tweet_user_img}}")
+                         a(href="http://twitter.com/{{tweet.user.screen_name}}")
+                            img.media-object.thumbnail(src="{{tweet.user.profile_image_url}}")
                       .media-body
-                         h4.media-heading @{{tweet.tweet_username}}
-                         span.tweet_info.text-primary.clearfix {{tweet.tweet_info}}
-                         span.tweet {{tweet.tweet}}
-            .footer
-                p &copy; Shebbak 2014
+                         h4.media-heading
+                            |@
+                            a(href="http://twitter.com/{{tweet.user.screen_name}}", target="_blank") {{tweet.user.screen_name}}
+                         span.tweet_info.text-warning.clearfix.small
+                             a(href="http://twitter.com/{{tweet.user.screen_name}}/status/{{tweet.id_str}}", target="_blank") {{tweet.created_at}}
+                             |&nbsp;via&nbsp;
+                             span(ng-bind-html='tweet.source')
+                         span.tweet.pull-right(ng-if="tweet.lang == 'ar'")(dir="auto")(ng-bind-html='tweet.text | tweet_filter')
+                         span.tweet(ng-if="tweet.lang != 'ar'")(dir="auto")(ng-bind-html='tweet.text | tweet_filter')
+            .footer.container.small
+                p.pull-left &copy; Shebbak {{year}}
+                p.pull-right
+                    | developed by: @
+                    a(href="http://twitter.com/bingorabbit", target="_blank") bingorabbit
+                    | &nbsp; - &nbsp;
+                    a(href="http://bingorabbit.com", target="_blank") bingorabbit.com
+                    br
+                    a.twitter-follow-button.pull-right(href="https://twitter.com/bingorabbit",data-show-count="false",data-lang="en")
+
         // /container
         // Bootstrap core JavaScript
         script(type='text/javascript', src='js/socket.io-client/socket.io.js')
         script(type='text/javascript', src='bower_components/angular/angular.js')
         script(type='text/javascript', src='bower_components/angular-socket-io/socket.js')
         script(type='text/javascript', src='bower_components/angular-resource/angular-resource.js')
+        script(type='text/javascript', src='bower_components/angular-sanitize/angular-sanitize.js')
         script(type='text/javascript', src='js/services.js')
+        script(type='text/javascript', src='js/filters.js')
         script(type='text/javascript', src='js/app.js')
+        script(type="text/javascript", src='js/follow.js')
