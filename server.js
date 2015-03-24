@@ -8,9 +8,7 @@ var io = require('socket.io')(server)
 var fs = require('fs');
 var configurationFile = "./configs.json"
 
-var configs = JSON.parse(
-                fs.readFileSync(configurationFile)
-                )
+var configs = JSON.parse(fs.readFileSync(configurationFile))
 var Twit = require('twit')
 
 var T = new Twit(configs.twitter)

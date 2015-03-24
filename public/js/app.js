@@ -6,14 +6,14 @@ var ShebbakApp = angular.module('ShebbakApp', ['ShebbakServices', 'ngSanitize', 
         $rootScope.year = new Date().getFullYear();
     });
 
-ShebbakApp.config(['$routerProvider', function($routerProvider){
-    $routerProvider.when('/', {
-        controller: 'MainController'
-    }).
-    otherwise({
-        redirectTo: '/'
-    });
-}]);
+//ShebbakApp.config(['$routerProvider', function($routerProvider){
+//    $routerProvider.when('/', {
+//        controller: 'MainController'
+//    }).
+//    otherwise({
+//        redirectTo: '/'
+//    });
+//}]);
 
 ShebbakApp.controller('MainController', function($scope, socket){
 ;
@@ -22,7 +22,11 @@ ShebbakApp.controller('MainController', function($scope, socket){
     socket.emit("Hello", {"name": "bingo"})
 
     socket.on('tweet', function(data){
+        if ($scope.tweets.length == 10){
+            $scope.tweets.pop();
+        }
         $scope.tweets.unshift(data);
+        console.log($scope.tweets.length)
     })
 
     //$scope.tweets = [
