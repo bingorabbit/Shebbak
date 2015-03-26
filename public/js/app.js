@@ -1,58 +1,38 @@
 /**
  * Created by bingorabbit on 3/20/15.
  */
-var ShebbakApp = angular.module('ShebbakApp', ['ShebbakServices', 'ngSanitize', 'twitterFilters'])
+var ShebbakApp = angular.module('ShebbakApp', ['ShebbakServices', 'ShebbakControllers', 'ngRoute'])
     .run(function($rootScope){
         $rootScope.year = new Date().getFullYear();
+
+        $rootScope.setActive = function (element) {
+            console.log(element);
+            $rootScope.home_active = false;
+            $rootScope.login_active = false;
+            $rootScope.contact_active = false;
+            $rootScope.about_active = false;
+            $rootScope[element+'_active'] = true;
+        }
     });
 
-//ShebbakApp.config(['$routerProvider', function($routerProvider){
-//    $routerProvider.when('/', {
-//        controller: 'MainController'
-//    }).
-//    otherwise({
-//        redirectTo: '/'
-//    });
-//}]);
-
-ShebbakApp.controller('MainController', function($scope, socket){
-;
-    $scope.tweets = [];
-
-    socket.emit("Hello", {"name": "bingo"})
-
-    socket.on('tweet', function(data){
-        if ($scope.tweets.length == 10){
-            $scope.tweets.pop();
-        }
-        $scope.tweets.unshift(data);
-        console.log($scope.tweets.length)
-    })
-
-    //$scope.tweets = [
-    //    {
-    //        'tweet_username': 'bingorabbit',
-    //        'tweet': "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    //        'tweet_info': '6:11pm · 19 Mar 2015',
-    //        'tweet_user_img': "http://placehold.it/75x75"
-    //    },
-    //    {
-    //        'tweet_username': 'bingorabbit',
-    //        'tweet': "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    //        'tweet_info': '6:11pm · 19 Mar 2015',
-    //        'tweet_user_img': "http://placehold.it/75x75"
-    //    },
-    //    {
-    //        'tweet_username': 'bingorabbit',
-    //        'tweet': "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    //        'tweet_info': '6:11pm · 19 Mar 2015',
-    //        'tweet_user_img': "http://placehold.it/75x75"
-    //    },
-    //    {
-    //        'tweet_username': 'bingorabbit',
-    //        'tweet': "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    //        'tweet_info': '6:11pm · 19 Mar 2015',
-    //        'tweet_user_img': "http://placehold.it/75x75"
-    //    }
-    //]
-});
+ShebbakApp.config(['$routeProvider', function($routeProvider){
+    $routeProvider.when('/', {
+        controller: 'MainController',
+        templateUrl: 'partials/content.jade'
+    }).
+    when('/login/', {
+        controller: 'LoginController',
+        templateUrl: 'partials/login.jade'
+    }).
+    when('/about/', {
+        controller: 'AboutController',
+        templateUrl: 'partials/about.jade'
+    }).
+    when('/contact/', {
+        controller: 'ContactController',
+        templateUrl: 'partials/contact.jade'
+    }).
+    otherwise({
+        redirectTo: '/'
+    });
+}]);

@@ -35,13 +35,22 @@ io.on('connection', function(socket){
         stream.on('error', function(error){
             console.log("Error happened: " + error);
         });
+    });
+    socket.on('disconnect', function(ev){
+        console.log('##########################################################')
+    });
+    socket.on('reconnecting', function(ev){
+        console.log('RECONNECTING##########################################################')
     })
 });
 
 app.get("/", function(req, res){
     res.render('index')
 });
-
+app.get('/partials/:name', function (req, res) {
+    var name = req.params.name;
+    res.render(name);
+});
 server.listen(app.get('port'), function(req, res){
     console.log("Listening on port: " + app.get('port'));
 })
