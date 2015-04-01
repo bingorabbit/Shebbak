@@ -4,27 +4,35 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
     $rootScope.setActive('home');
     if(!$cookies.loggedIn){
         $location.path('/login')
-    }
-    $scope.query = function(hashtag){
-        console.log(hashtag)
-        if(hashtag){
-            if(hashtag.indexOf('#') == -1) hashtag = '#' + hashtag;
-            $scope.tweets = [];
+    } else {
+        $scope.query = function(hashtag){
+            console.log("Hashtag: ", hashtag)
+            $cookies.q = hashtag;
+            if(hashtag){
+                if(hashtag.indexOf('#') == -1) hashtag = '#' + hashtag;
+                $scope.tweets = [];
+                socket.emit("q", {
+                    'q': hashtag,
+                    'access_token': $cookies.access_token,
+                    'access_token_secret': $cookies.access_token_secret
+                });
+                socket.on('tweet', function(data){
+                    if ($scope.tweets.length == 10){
+                        $scope.tweets.pop();
+                    }
+                    $scope.tweets.unshift(data);
+                });
+                socket.on('disconnect', function(ev){
+                    console.log('##########################################################')
+                });
+            }
+        }
 
-            socket.emit("q", {
-                'q': hashtag,
-                'access_token': $cookies.access_token,
-                'access_token_secret': $cookies.access_token_secret
-            });
-            socket.on('tweet', function(data){
-                if ($scope.tweets.length == 10){
-                    $scope.tweets.pop();
-                }
-                $scope.tweets.unshift(data);
-            });
-            socket.on('disconnect', function(ev){
-                console.log('##########################################################')
-            });
+        if($cookies.q){
+            console.log("Session instantiated before with query: ", $cookies.q);
+            $scope.hashtag = $cookies.q;
+            $scope.message = "Welcome back..";
+            $scope.query($cookies.q);
         }
     }
 });

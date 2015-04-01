@@ -52,12 +52,16 @@ app.use(session({
 
 io.on('connection', function(socket){
     socket.on('q', function(data){
+
         var T = new Twit({
             "consumer_key": configs.twitter.consumer_key,
             "consumer_secret": configs.twitter.consumer_secret,
             "access_token": data.access_token,
             "access_token_secret": data.access_token_secret
         });
+        if(stream) {
+            stream.stop();
+        }
         var stream = T.stream('statuses/filter', {
             track: data.q
         });
@@ -71,14 +75,18 @@ io.on('connection', function(socket){
         });
         stream.on('error', function(error){
             console.log("Error: ", error);
+            stream.stop();
+            stream.start();
         });
+
+        socket.on('disconnect', function(ev){
+            console.log('DISCONNECTED', ev);
+            stream.stop();
+        });
+        socket.on('reconnecting', function(ev){
+            console.log('RECONNECTING:', ev)
+        })
     });
-    socket.on('disconnect', function(ev){
-        console.log('DISCONNECTED', ev)
-    });
-    socket.on('reconnecting', function(ev){
-        console.log('RECONNECTING:', ev)
-    })
 });
 
 app.get('/auth/twitter', function (req, res) {

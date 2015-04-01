@@ -1,7 +1,7 @@
 /**
  * Created by bingorabbit on 3/20/15.
  */
-var ShebbakApp = angular.module('ShebbakApp', ['ShebbakServices', 'ShebbakControllers', 'ngRoute'])
+var ShebbakApp = angular.module('ShebbakApp', ['ShebbakServices', 'ShebbakControllers', 'ngRoute', 'ngAnimate'])
     .run(function($rootScope){
         $rootScope.year = new Date().getFullYear();
 
