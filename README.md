@@ -11,14 +11,13 @@ A simple application built with AngularJS, NodeJS and styled with Twitter Bootst
     `npm install`
 - Create an application on twitter through [https://apps.twitter.com/](https://apps.twitter.com/)
 - Be sure to check `Allow this application to be used to Sign in with Twitter` in the application settings page.
-- Rename configs.sample.json to configs.json and fill the following from your twitter application `Keys and Access Tokens` page:
+- Rename configs.sample.json to configs.json and fill the following from your twitter application `Keys and Access Tokens` page then save the file.:
 
     ```json
         "twitter": {
            "consumer_key": "Consumer Key (API Key)",
            "consumer_secret": "Consumer Secret (API Secret)	"
        },```
-  Then save the file.
 - Start the server
 
     `node server.js`
