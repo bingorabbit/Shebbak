@@ -22,7 +22,26 @@ var io = require('socket.io')(server)
 // Configuration File
 var fs = require('fs');
 var configurationFile = "./configs.json"
-var configs = JSON.parse(fs.readFileSync(configurationFile))
+try {
+    fs.readFileSync(configurationFile, 'utf8', function(error, data){
+            if (!error){
+                    var configs = JSON.parse(data)
+                    } else {
+                    console.log("Configuration file not found.");
+                }
+        })
+}
+catch (e){
+        var configs = {
+                "twitter": {
+                    "consumer_key": process.env.consumer_key,
+                        "consumer_secret": process.env.consumer_secret
+                },
+            "PORT_LISTENER": 3000
+        };
+    console.log(e)
+}
+
 
 var Twit = require('twit')
 
@@ -54,8 +73,8 @@ io.on('connection', function(socket){
     socket.on('q', function(data){
 
         var T = new Twit({
-            "consumer_key": configs.twitter.consumer_key || process.env.consumer_key,
-            "consumer_secret": configs.twitter.consumer_secret || process.env.consumer_secret,
+            "consumer_key": configs.twitter.consumer_key,
+            "consumer_secret": configs.twitter.consumer_secret,
             "access_token": data.access_token,
             "access_token_secret": data.access_token_secret
         });
