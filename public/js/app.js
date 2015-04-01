@@ -14,11 +14,14 @@ var ShebbakApp = angular.module('ShebbakApp', ['ShebbakServices', 'ShebbakContro
             $rootScope[element+'_active'] = true;
         }
     });
-
 ShebbakApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.when('/', {
         controller: 'MainController',
-        templateUrl: 'partials/content.jade'
+        templateUrl: 'partials/main.jade'
+    }).
+    when('/home/', {
+        controller: 'HomeController',
+        templateUrl: 'partials/home.jade'
     }).
     when('/login/', {
         controller: 'LoginController',
@@ -27,10 +30,6 @@ ShebbakApp.config(['$routeProvider', function($routeProvider){
     when('/about/', {
         controller: 'AboutController',
         templateUrl: 'partials/about.jade'
-    }).
-    when('/contact/', {
-        controller: 'ContactController',
-        templateUrl: 'partials/contact.jade'
     }).
     otherwise({
         redirectTo: '/'

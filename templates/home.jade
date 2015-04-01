@@ -1,0 +1,24 @@
+div.row.hashtagform
+    form.col-md-3.pull-right.input-group(ng-submit="query(hashtag)")
+        span.fa.fa-slack.hashsign
+        input(type="text", ng-model="hashtag", name="hashtag", id="hashtag", autofocus="autofocus")
+        span.input-group-btn.hidden
+            input.btn.btn-default(type="submit")
+br
+br
+.media-list
+
+    .media.slider(ng-repeat='tweet in tweets track by tweet.id')
+        .media-left.media-top
+            a(href="http://twitter.com/{{tweet.user.screen_name}}", target="_blank")
+                img.media-object.thumbnail(ng-src="{{tweet.user.profile_image_url}}")
+        .media-body
+            h4.media-heading
+                | @
+                a(href="http://twitter.com/{{tweet.user.screen_name}}", target="_blank") {{tweet.user.screen_name}}
+            span.tweet_info.text-warning.clearfix.small
+                a(href="http://twitter.com/{{tweet.user.screen_name}}/status/{{tweet.id_str}}", target="_blank") {{tweet.created_at}}
+                | &nbsp;via&nbsp;
+                span(ng-bind-html='tweet.source')
+            span.tweet.pull-right(ng-if="tweet.lang == 'ar'",dir="auto",ng-bind-html='tweet.text | tweet_filter')
+            span.tweet(ng-if="tweet.lang != 'ar'",dir="auto",ng-bind-html='tweet.text | tweet_filter')

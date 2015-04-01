@@ -15,15 +15,13 @@ html(lang='en')
         link(href='style.css', rel='stylesheet')
 
     body(ng-app='ShebbakApp')
-        .container(ng-controller='MainController')
+        .container
             .header
                 ul.nav.nav-pills.pull-right
                     li(ng-class="{'active': home_active}")
                         a(href='/#/') Home
                     li(ng-class="{'active': about_active}")
                         a(href='#/about/') About
-                    li(ng-class="{'active': contact_active}")
-                        a(href='#/contact/') Contact
                 h3.text-muted
                     span.fa.fa-slack
                     | Shebbak
@@ -47,6 +45,7 @@ html(lang='en')
         script(type='text/javascript', src='bower_components/angular-resource/angular-resource.js')
         script(type='text/javascript', src='bower_components/angular-route/angular-route.js')
         script(type='text/javascript', src='bower_components/angular-sanitize/angular-sanitize.js')
+        script(type='text/javascript', src='bower_components/angular-cookies/angular-cookies.js')
         script(type='text/javascript', src='js/services.js')
         script(type='text/javascript', src='js/filters.js')
         script(type='text/javascript', src='js/app.js')

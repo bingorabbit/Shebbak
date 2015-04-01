@@ -77,3 +77,25 @@ span.fa-slack {
     transform: rotate(19deg);
     margin-right: 0.1em;
 }
+input#hashtag {
+    border: none;
+    border-bottom: 1px #ddd solid;
+    font-size:1.5em;
+    height: 2em;
+    font-style: italic;
+    color: #868686;
+    padding-left: 1.5em;
+
+}
+.row.hashtagform {
+    margin: 0;
+}
+input#hashtag:focus {
+    outline: none;
+}
+.hashsign {
+    color: #868686;
+    font-size: 2em !important;
+    position: absolute;
+    margin-top: 0.2em;
+}
