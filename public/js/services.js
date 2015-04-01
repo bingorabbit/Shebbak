@@ -4,9 +4,7 @@
 var ShebbakServices = angular.module('ShebbakServices', ['btford.socket-io']);
 
 ShebbakServices.factory('socket', function(socketFactory){
-
     return socketFactory({
-        ioSocket: io.connect('http://localhost:3000')
+        ioSocket: io.connect(window.location.host)
     });
-
 });
