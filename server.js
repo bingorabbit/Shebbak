@@ -27,13 +27,13 @@ try {
     var configs = JSON.parse(fs.readFileSync(configurationFile));
 }
 catch (e){
-    var configs = JSON.parse({
+    var configs = {
         "twitter": {
             "consumer_key": process.env.consumer_key,
             "consumer_secret": process.env.consumer_secret
         },
         "PORT_LISTENER": 3000
-    });
+    };
     console.log(e)
 }
 
