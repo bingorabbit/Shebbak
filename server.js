@@ -32,7 +32,8 @@ catch (e){
             "consumer_key": process.env.consumer_key,
             "consumer_secret": process.env.consumer_secret
         },
-        "PORT_LISTENER": 3000
+        "PORT_LISTENER": 3000,
+        "callback_url": "https://shebbak.herokuapp.com/auth/callback/"
     };
     console.log(e)
 }
@@ -47,7 +48,7 @@ var oa = new OAuth(
     configs.twitter.consumer_key,
     configs.twitter.consumer_secret,
     "1.0",
-    "http://localhost:3000/auth/callback/",
+    configs.callback_url,
     "HMAC-SHA1"
 );
 
