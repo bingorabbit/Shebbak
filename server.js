@@ -54,8 +54,8 @@ io.on('connection', function(socket){
     socket.on('q', function(data){
 
         var T = new Twit({
-            "consumer_key": configs.twitter.consumer_key,
-            "consumer_secret": configs.twitter.consumer_secret,
+            "consumer_key": configs.twitter.consumer_key || process.env.consumer_key,
+            "consumer_secret": configs.twitter.consumer_secret || process.env.consumer_secret,
             "access_token": data.access_token,
             "access_token_secret": data.access_token_secret
         });
