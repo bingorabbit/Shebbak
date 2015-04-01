@@ -18,27 +18,22 @@ function guid() {
 var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server)
-
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
 // Configuration File
 var fs = require('fs');
 var configurationFile = "./configs.json"
 try {
-    fs.readFileSync(configurationFile, 'utf8', function(error, data){
-            if (!error){
-                    var configs = JSON.parse(data)
-                    } else {
-                    console.log("Configuration file not found.");
-                }
-        })
+
+    var configs = JSON.parse(fs.readFileSync(configurationFile));
 }
 catch (e){
-        var configs = {
-                "twitter": {
-                    "consumer_key": process.env.consumer_key,
-                        "consumer_secret": process.env.consumer_secret
-                },
-            "PORT_LISTENER": 3000
-        };
+    var configs = JSON.parse({
+        "twitter": {
+            "consumer_key": process.env.consumer_key,
+            "consumer_secret": process.env.consumer_secret
+        },
+        "PORT_LISTENER": 3000
+    });
     console.log(e)
 }
 
