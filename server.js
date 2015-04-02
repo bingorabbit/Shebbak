@@ -74,7 +74,7 @@ io.on('connection', function(socket){
         });
         console.log(data.q);
         stream.on('tweet', function(tweet){
-            console.log('Received a new tweet..');
+            console.log('Received a new ', data.q, ' tweet..');
             socket.emit('tweet', tweet);
         });
         stream.on('disconnect', function (disconnectMessage) {
