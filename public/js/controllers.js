@@ -14,7 +14,7 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
                 console.log("Hashtag:", hashtag)
                 if(hashtag.indexOf('#') == -1) hashtag = '#' + hashtag;
                 $scope.tweets = [];
-                console.log(socket);
+                socket.emit('remove');
                 socket.emit("q", {
                     'q': hashtag,
                     'access_token': $cookies.access_token,

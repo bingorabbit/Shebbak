@@ -69,7 +69,8 @@ io.on('connection', function(socket){
     console.log("A new socket instantiated with ID:", socket.id, "Current number of sockets currently up:", io.sockets.sockets.length);
     console.log("Current sockets IDs:", Object.keys(io.sockets.connected).join(", "));
     socket.on('q', function(data){
-        if(!application_streams[socket.id]['stream']){
+        console.log(application_streams);
+        if(!application_streams[socket.id].stream){
             console.log("Socket ID:", socket.id, "started a new hashtag query:", data.q);
             var T = new Twit({
                 "consumer_key": configs.twitter.consumer_key,
@@ -80,6 +81,7 @@ io.on('connection', function(socket){
             var stream = T.stream('statuses/filter', {
                 track: data.q
             });
+            application_streams[socket.id]['stream'] = stream;
             stream.on('tweet', function(tweet){
                 console.log('Received a new', data.q, 'tweet with tweet ID:', tweet.id_str);
                 socket.emit('tweet_'+data.q.slice(1), tweet);
@@ -101,19 +103,34 @@ io.on('connection', function(socket){
             stream.on('error', function(error){
                 console.log(data.q, "Error: ", error.message);
                 stream.stop();
-                stream.start();
+                setTimeout(function(){
+                    stream.start();
+                }, 5000)
             });
-            application_streams[socket.id]['streamloca'] = stream;
         }
 
         socket.on('disconnect', function(ev){
             no_of_sockets -= 1;
             console.log("Client", socket.id, "disconnected with message:", ev);
-            if(application_streams[socket.id]['stream']){
-                application_streams[socket.id]['stream'].stop()
+            try {
+                if (application_streams[socket.id].stream) {
+                    application_streams[socket.id].stream.stop()
+                }
+                delete application_streams[socket.id];
+                console.log('Removed All Search from user >>', socket.id);
             }
-            delete application_streams[socket.id];
-            console.log('Removed All Search from user >>', socket.id);
+            catch (e) {
+                console.log("This is not supposed to happen, tried to disconnect an application socket stream that wasn't found.")
+            }
+        });
+        socket.on('remove', function(ev){
+            console.log("Client", socket.id, "is changing his search query.");
+            try {
+                application_streams[socket.id].stream.stop();
+                delete application_streams[socket.id].stream;
+            } catch (e) {
+                console.log("This is not supposed to happen, tried to delete an application socket stream that wasn't found.")
+            }
         });
         socket.on('reconnecting', function(ev){
             console.log('RECONNECTING:', ev)
