@@ -9,11 +9,12 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
         $location.path('/login')
     } else {
         $scope.query = function(hashtag){
-            console.log("Hashtag:", hashtag)
             $cookies.q = hashtag;
             if(hashtag){
+                console.log("Hashtag:", hashtag)
                 if(hashtag.indexOf('#') == -1) hashtag = '#' + hashtag;
                 $scope.tweets = [];
+                console.log(socket);
                 socket.emit("q", {
                     'q': hashtag,
                     'access_token': $cookies.access_token,
@@ -38,7 +39,6 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
                 })
             }
         }
-
         if($cookies.q){
             console.log("Session instantiated before with query:", $cookies.q);
             $scope.hashtag = $cookies.q;

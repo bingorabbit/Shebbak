@@ -8,6 +8,7 @@ var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server)
 var no_of_sockets = 0; // To hold number of currently opened sockets.
+var application_streams = {}
 
 // Instantiates Twitter client
 var Twit = require('twit')
@@ -62,55 +63,63 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
-
 // Once out client is connected to our backend, let's start our application logic.
 io.on('connection', function(socket){
+    application_streams[socket.id] = {};
     console.log("A new socket instantiated with ID:", socket.id, "Current number of sockets currently up:", io.sockets.sockets.length);
     console.log("Current sockets IDs:", Object.keys(io.sockets.connected).join(", "));
     socket.on('q', function(data){
-        console.log("Socket ID:", socket.id, "started a new hastag query:", data.q);
-        var T = new Twit({
-            "consumer_key": configs.twitter.consumer_key,
-            "consumer_secret": configs.twitter.consumer_secret,
-            "access_token": data.access_token,
-            "access_token_secret": data.access_token_secret
-        });
-        if(stream) {
-            console.log("Current stream: ", stream.id)
-            stream.stop();
-            var stream = '';
+        if(!application_streams[socket.id]['stream']){
+            console.log("Socket ID:", socket.id, "started a new hashtag query:", data.q);
+            var T = new Twit({
+                "consumer_key": configs.twitter.consumer_key,
+                "consumer_secret": configs.twitter.consumer_secret,
+                "access_token": data.access_token,
+                "access_token_secret": data.access_token_secret
+            });
+            var stream = T.stream('statuses/filter', {
+                track: data.q
+            });
+            stream.on('tweet', function(tweet){
+                console.log('Received a new', data.q, 'tweet with tweet ID:', tweet.id_str);
+                socket.emit('tweet_'+data.q.slice(1), tweet);
+            });
+            stream.on('limit', function(limitMessage) {
+                console.log('Limit for User: ' + socket.id + ' on query ' + data.q + ' has rechead!');
+            });
+            stream.on('warning', function(warning) {
+                console.log('Warning:', warning);
+            });
+            // https://dev.twitter.com/streaming/overview/connecting
+            stream.on('reconnect', function(request, response, connectInterval) {
+                console.log('Reconnecting :: connectInterval:', connectInterval)
+            });
+            // Disconnected from twitter..
+            stream.on('disconnect', function (disconnectMessage) {
+                console.log("Stream disconnected with error message: " + disconnectMessage);
+            });
+            stream.on('error', function(error){
+                console.log(data.q, "Error: ", error.message);
+                stream.stop();
+                stream.start();
+            });
+            application_streams[socket.id]['streamloca'] = stream;
         }
-        var stream = T.stream('statuses/filter', {
-            track: data.q
-        });
-        stream.on('tweet', function(tweet){
-            console.log('Received a new', data.q, 'tweet..');
-            socket.emit('tweet_'+data.q.slice(1), tweet);
-        });
-        stream.on('disconnect', function (disconnectMessage) {
-            console.log("Stream disconnected with error message: " + disconnectMessage);
-        });
-        stream.on('error', function(error){
-            console.log(error);
-            console.log(data.q, "Error: ", error);
-            stream.stop();
-            stream.start();
-        });
 
         socket.on('disconnect', function(ev){
             no_of_sockets -= 1;
-            stream.stop();
-            try{
-                console.log('DISCONNECTED', ev);
-            } catch (e) {
-
+            console.log("Client", socket.id, "disconnected with message:", ev);
+            if(application_streams[socket.id]['stream']){
+                application_streams[socket.id]['stream'].stop()
             }
+            delete application_streams[socket.id];
+            console.log('Removed All Search from user >>', socket.id);
         });
         socket.on('reconnecting', function(ev){
             console.log('RECONNECTING:', ev)
             var T = '';
-            stream.stop();
-        })
+            application_streams[socket.id]['stream'].stop();
+        });
     });
 });
 function get_oa(req){
