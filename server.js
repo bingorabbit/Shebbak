@@ -42,15 +42,6 @@ catch (e){
 var Twit = require('twit')
 
 var OAuth = require('oauth').OAuth;
-var oa = new OAuth(
-    "https://api.twitter.com/oauth/request_token",
-    "https://api.twitter.com/oauth/access_token",
-    configs.twitter.consumer_key,
-    configs.twitter.consumer_secret,
-    "1.0",
-    configs.callback_url,
-    "HMAC-SHA1"
-);
 
 app.set('port', process.env.PORT || configs.PORT_LISTENER);
 app.set('views', __dirname + '/templates');
@@ -76,6 +67,7 @@ io.on('connection', function(socket){
         });
         if(stream) {
             stream.stop();
+            var stream = '';
         }
         var stream = T.stream('statuses/filter', {
             track: data.q
@@ -100,11 +92,25 @@ io.on('connection', function(socket){
         });
         socket.on('reconnecting', function(ev){
             console.log('RECONNECTING:', ev)
+            var T = '';
+            var stream = '';
         })
     });
 });
-
+function get_oa(req){
+    var oa = new OAuth(
+        "https://api.twitter.com/oauth/request_token",
+        "https://api.twitter.com/oauth/access_token",
+        configs.twitter.consumer_key,
+        configs.twitter.consumer_secret,
+        "1.0",
+        req.protocol + '://' + req.get('host') + req.originalUrl.replace('twitter', 'callback'),
+        "HMAC-SHA1"
+    );
+    return oa;
+}
 app.get('/auth/twitter', function (req, res) {
+    oa = get_oa(req);
     oa.getOAuthRequestToken(function (error, oauth_token, oauth_token_secret, results) {
         if (error) {
             console.log(error);
@@ -124,7 +130,7 @@ app.get('/auth/twitter', function (req, res) {
 app.get('/auth/callback', function (req, res) {
     req.session.oauth.verifier = req.query.oauth_verifier;
     var oauth = req.session.oauth;
-
+    oa = get_oa(req);
     oa.getOAuthAccessToken(oauth.token, oauth.token_secret, oauth.verifier,
         function (error, oauth_access_token, oauth_access_token_secret, results) {
             if (error) {
