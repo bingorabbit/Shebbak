@@ -19,7 +19,7 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
                     'access_token': $cookies.access_token,
                     'access_token_secret': $cookies.access_token_secret
                 });
-                socket.on('tweet', function(data){
+                socket.on('tweet_'+$cookies.q, function(data){
                     if ($scope.tweets.length == 10){
                         $scope.tweets.pop();
                     }

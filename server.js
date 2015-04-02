@@ -85,13 +85,14 @@ io.on('connection', function(socket){
         });
         stream.on('tweet', function(tweet){
             console.log('Received a new', data.q, 'tweet..');
-            socket.emit('tweet', tweet);
+            socket.emit('tweet_'+data.q.slice(1), tweet);
         });
         stream.on('disconnect', function (disconnectMessage) {
             console.log("Stream disconnected with error message: " + disconnectMessage);
         });
         stream.on('error', function(error){
-            console.log("Error: ", error);
+            console.log(error);
+            console.log(data.q, "Error: ", error);
             stream.stop();
             stream.start();
         });
