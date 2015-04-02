@@ -2,8 +2,14 @@ div.row.hashtagform
     form.col-md-3.pull-right.input-group(ng-submit="query(hashtag)")
         span.fa.fa-slack.hashsign
         input(type="text", ng-model="hashtag", name="hashtag", id="hashtag", autofocus="autofocus")
+        span.fa.fa-spinner.fa-spin.spinicon(ng-show='loading')
         span.input-group-btn.hidden
             input.btn.btn-default(type="submit")
+        br
+        span.small.text-muted
+            | Enter your hashtag here #{' '}
+            span.fa.fa-angle-up
+            | #{' '}and press enter..
 br
 .media-list
     .media.slide(ng-repeat='tweet in tweets track by trackingFunction()', ng-animate="'animate'", ng-class="{first_slide: $first}")

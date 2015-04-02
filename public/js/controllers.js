@@ -2,6 +2,7 @@ var ShebbakControllers = angular.module('ShebbakControllers', ['ngSanitize', 'tw
 
 ShebbakControllers.controller('HomeController', function($scope, $rootScope, socket, $cookies, $location){
     $rootScope.setActive('home');
+    $scope.loading = false;
     $scope.trackingFunction = function(){
         return Math.floor((Math.random()*999999999) + 100000000);
     }
@@ -9,6 +10,7 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
         $location.path('/login')
     } else {
         $scope.query = function(hashtag){
+            $scope.loading = true;
             $cookies.q = hashtag;
             if(hashtag){
                 console.log("Hashtag:", hashtag)
@@ -21,6 +23,7 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
                     'access_token_secret': $cookies.access_token_secret
                 });
                 socket.on('tweet_'+$cookies.q, function(data){
+                    $scope.loading = false;
                     if ($scope.tweets.length == 10){
                         $scope.tweets.pop();
                     }
@@ -31,6 +34,7 @@ ShebbakControllers.controller('HomeController', function($scope, $rootScope, soc
                 });
                 socket.addListener('reconnect', function(){
                     console.log('Server Back Online..Reconnecting..');
+                    $scope.loading = true;
                     socket.emit("q", {
                         'q': hashtag,
                         'access_token': $cookies.access_token,

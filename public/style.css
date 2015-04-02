@@ -84,11 +84,14 @@ input#hashtag {
 input#hashtag:focus {
     outline: none;
 }
-.hashsign {
+.hashsign, .spinicon {
     color: #868686;
     font-size: 2em !important;
     position: absolute;
     margin-top: 0.2em;
+}
+.spinicon {
+    margin-left: -1em;
 }
 .alert {
     padding: 8px
