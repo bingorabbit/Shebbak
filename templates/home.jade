@@ -15,7 +15,7 @@ br
                 | @
                 a(href="http://twitter.com/{{tweet.user.screen_name}}", target="_blank") {{tweet.user.screen_name}}
             span.tweet_info.text-warning.clearfix.small
-                a(href="http://twitter.com/{{tweet.user.screen_name}}/status/{{tweet.id_str}}", target="_blank") {{tweet.created_at}}
+                a(href="http://twitter.com/{{tweet.user.screen_name}}/status/{{tweet.id_str}}", target="_blank") {{tweet.created_at | format_tweet_time}}
                 | &nbsp;via&nbsp;
                 span(ng-bind-html='tweet.source')
             span.tweet.pull-right(ng-if="tweet.lang == 'ar'",dir="auto",ng-bind-html='tweet.text | tweet_filter')

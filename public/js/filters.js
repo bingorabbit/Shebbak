@@ -21,4 +21,9 @@ angular.module('twitterFilters', ['ngSanitize'])
 
             return text;
         };
+    })
+    .filter('format_tweet_time', function () {
+        return function (text) {
+            return moment(text).format('HH:mm a, ddd MMMM Do, YYYY');
+        };
     });
