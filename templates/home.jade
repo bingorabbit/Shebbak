@@ -6,8 +6,7 @@ div.row.hashtagform
             input.btn.btn-default(type="submit")
 br
 .media-list
-
-    .media.animate(ng-repeat='tweet in tweets track by trackingFunction()', ng-animate="'animate'")
+    .media.slide(ng-repeat='tweet in tweets track by trackingFunction()', ng-animate="'slide'")
         .media-left.media-top
             a(href="http://twitter.com/{{tweet.user.screen_name}}", target="_blank")
                 img.media-object.thumbnail(ng-src="{{tweet.user.profile_image_url}}")
