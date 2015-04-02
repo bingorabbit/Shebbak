@@ -94,24 +94,28 @@ input#hashtag:focus {
     padding: 8px
 }
 /* Tweet Animation */
-.slide.ng-enter, .slide.ng-leave {
-    -webkit-transition:0.5s linear all;
-    transition:0.5s linear all;
+.first_slide.ng-enter, .slide.ng-enter {
+    -webkit-transition: 300ms linear all;
+    transition: 300ms linear all;
 }
-
-.slide.ng-enter {
+.first_slide.ng-enter {
     opacity: 0;
     height: 0px;
-}        /* starting animations for enter */
-.slide.ng-enter.ng-enter-active {
-    opacity: 1;
+    max-height: 0px;
+}
+.slide.ng-enter-active {
+    opacity:1;
     height: 99px;
-} /* terminal animations for enter */
+    max-height: 99px;
+}
+
 .slide.ng-leave {
     opacity: 1;
     height: 99px;
-}        /* starting animations for leave */
-.slide.ng-leave.ng-leave-active {
+    max-height: 99px;
+}
+.slide.ng-leave-active {
     opacity: 0;
     height: 0px;
-} /* terminal animations for leave */
+    max-height: 0px;
+}
