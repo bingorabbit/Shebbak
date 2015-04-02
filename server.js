@@ -3,29 +3,27 @@ var express = require('express')
 var session = require('express-session')
 var cookieParser = require('cookie-parser')
 
-function guid() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    }
-
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
-}
-
 // Instantiates an application
 var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server)
-app.use('/bower_components', express.static(__dirname + '/bower_components'));
-// Configuration File
+var no_of_sockets = 0; // To hold number of currently opened sockets.
+
+// Instantiates Twitter client
+var Twit = require('twit')
+
+// Instantiates OAuth
+var OAuth = require('oauth').OAuth;
+
+// Get, read and parse Configuration File
 var fs = require('fs');
 var configurationFile = "./configs.json"
+// Tries in development environment
 try {
 
     var configs = JSON.parse(fs.readFileSync(configurationFile));
 }
+// For heroku deployment
 catch (e){
     var configs = {
         "twitter": {
@@ -38,16 +36,25 @@ catch (e){
     console.log(e)
 }
 
+// Generates a guid for sessions.
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
 
-var Twit = require('twit')
-
-var OAuth = require('oauth').OAuth;
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
 
 app.set('port', process.env.PORT || configs.PORT_LISTENER);
 app.set('views', __dirname + '/templates');
 app.set('view engine', 'jade');
+
 app.locals.pretty = true;
 
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(express.static(__dirname + '/public/'));
 app.use(cookieParser())
 app.use(session({
@@ -56,9 +63,12 @@ app.use(session({
     saveUninitialized: true
 }));
 
+// Once out client is connected to our backend, let's start our application logic.
 io.on('connection', function(socket){
+    console.log("A new socket instantiated with ID:", socket.id, "Current number of sockets currently up:", io.sockets.sockets.length);
+    console.log("Current sockets IDs:", Object.keys(io.sockets.connected).join(", "));
     socket.on('q', function(data){
-
+        console.log("Socket ID:", socket.id, "started a new hastag query:", data.q);
         var T = new Twit({
             "consumer_key": configs.twitter.consumer_key,
             "consumer_secret": configs.twitter.consumer_secret,
@@ -66,15 +76,15 @@ io.on('connection', function(socket){
             "access_token_secret": data.access_token_secret
         });
         if(stream) {
+            console.log("Current stream: ", stream.id)
             stream.stop();
             var stream = '';
         }
         var stream = T.stream('statuses/filter', {
             track: data.q
         });
-        console.log(data.q);
         stream.on('tweet', function(tweet){
-            console.log('Received a new ', data.q, ' tweet..');
+            console.log('Received a new', data.q, 'tweet..');
             socket.emit('tweet', tweet);
         });
         stream.on('disconnect', function (disconnectMessage) {
@@ -87,13 +97,18 @@ io.on('connection', function(socket){
         });
 
         socket.on('disconnect', function(ev){
-            console.log('DISCONNECTED', ev);
+            no_of_sockets -= 1;
             stream.stop();
+            try{
+                console.log('DISCONNECTED', ev);
+            } catch (e) {
+
+            }
         });
         socket.on('reconnecting', function(ev){
             console.log('RECONNECTING:', ev)
             var T = '';
-            var stream = '';
+            stream.stop();
         })
     });
 });

@@ -1,8 +1,4 @@
 div.row.hashtagform
-    span.col-md-5.alert.alert-info(ng-if="message")
-        button.close(data-dismiss="alert", type="button", aria-label="Close")
-            span(aria-hidden="true") &times;
-        | {{message}}
     form.col-md-3.pull-right.input-group(ng-submit="query(hashtag)")
         span.fa.fa-slack.hashsign
         input(type="text", ng-model="hashtag", name="hashtag", id="hashtag", autofocus="autofocus")
@@ -11,7 +7,7 @@ div.row.hashtagform
 br
 .media-list
 
-    .media.animate(ng-repeat='tweet in tweets track by tweet.id', ng-animate="'animate'")
+    .media.animate(ng-repeat='tweet in tweets track by trackingFunction()', ng-animate="'animate'")
         .media-left.media-top
             a(href="http://twitter.com/{{tweet.user.screen_name}}", target="_blank")
                 img.media-object.thumbnail(ng-src="{{tweet.user.profile_image_url}}")

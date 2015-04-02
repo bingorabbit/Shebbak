@@ -28,14 +28,15 @@ html(lang='en')
              .content(ng-view)
 
             .footer.container.small
-                p.pull-left &copy; Shebbak {{year}}
-                p.pull-right
-                    | developed by: @
-                    a(href="http://twitter.com/bingorabbit", target="_blank") bingorabbit
-                    | &nbsp; - &nbsp;
-                    a(href="http://bingorabbit.com", target="_blank") bingorabbit.com
-                    br
-                    a.twitter-follow-button.pull-right(href="https://twitter.com/bingorabbit",data-show-count="false",data-lang="en")
+                span.row
+                    p.col-md-6.col-sm-12 &copy; Shebbak {{year}}
+                    p.col-md-6.col-sm-12.text-right
+                        | developed by: @
+                        a(href="http://twitter.com/bingorabbit", target="_blank") bingorabbit
+                        | &nbsp; - &nbsp;
+                        a(href="http://bingorabbit.com", target="_blank") bingorabbit.com
+                        br
+                        a.twitter-follow-button.pull-right(href="https://twitter.com/bingorabbit",data-show-count="false",data-lang="en")
 
         // /container
         // Bootstrap core JavaScript
