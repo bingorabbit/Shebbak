@@ -29,11 +29,11 @@ html(lang='en')
 
             .footer.container.small
                 span.row
-                    p.col-md-6.col-sm-12 &copy; Shebbak {{year}}
+                    p.col-md-6.col-sm-12 &copy Shebbak {{year}}
                     p.col-md-6.col-sm-12.text-right
                         | developed by: @
                         a(href="http://twitter.com/bingorabbit", target="_blank") bingorabbit
-                        | &nbsp; - &nbsp;
+                        | &nbsp - &nbsp
                         a(href="http://bingorabbit.com", target="_blank") bingorabbit.com
                         br
                         a.twitter-follow-button.pull-right(href="https://twitter.com/bingorabbit",data-show-count="false",data-lang="en")
@@ -56,3 +56,10 @@ html(lang='en')
         script(type='text/javascript', src='js/app.js')
         script(type='text/javascript', src='js/controllers.js')
         script(type="text/javascript", src='js/follow.js')
+        script.
+                (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+                function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+                e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+                e.src='//www.google-analytics.com/analytics.js';
+                r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+                ga('create','UA-61445747-2');ga('send','pageview');
